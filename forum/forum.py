@@ -1,7 +1,7 @@
 from flask import *
 from flask.ext.login import LoginManager, current_user, login_user, UserMixin, logout_user, login_required
 from config import *
-from database import *
+#from database import *
 
 #CONFIG
 
