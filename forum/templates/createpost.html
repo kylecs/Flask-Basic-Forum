@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+{% block body%}
+<div class="postsubmit">
+This is where one may add posts....
+
+<form action="action_post" method="POST">
+
+	<input type="text" placeholder="Title" name="title"><br>
+
+	<textarea rows="6" cols="50"  name="content" placeholder="Enter post here"></textarea><br>
+
+	<input type="submit" value="Submit Post">
+</form>
+</div>
+{% endblock %}

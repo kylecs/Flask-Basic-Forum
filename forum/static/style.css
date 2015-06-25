@@ -1,0 +1,47 @@
+.page{
+	font-family: Verdana;
+	font-style: normal;
+	font-size: 14pt;
+
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 1%;
+	width: 80%;
+	
+	padding-left: 3%;
+	padding-right: 3%;
+}
+.header{
+	border: 1px solid black;
+	overflow: hidden;
+	vertical-align: middle;
+	padding: 0.5%;
+}
+.content{
+	margin-top: 2%;
+}
+.login{
+	width: 25%;
+	float: right;
+	text-align: center;
+
+}
+.loginbox{
+	margin-right: auto;
+	margin-left: auto;
+	text-align: center;
+	margin-top: 3%;
+
+}
+.loginelement{
+	margin-top: 0.5%;
+}
+.logoutlink{
+	padding-left: 0.5%;
+	font-size: 12pt;
+}
+.postsubmit{
+	margin-right: auto;
+	margin-left: auto;
+	text-align: center;
+}
