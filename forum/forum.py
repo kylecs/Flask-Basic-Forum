@@ -1,7 +1,7 @@
 from flask import *
 from flask.ext.login import LoginManager, current_user, login_user, UserMixin, logout_user, login_required
 from config import *
-#from database import *
+from database import *
 
 #CONFIG
 
@@ -87,7 +87,7 @@ def action_createaccount():
 
 #RUN
 if __name__ == "__main__":
-	#db.create_all()
+	db.create_all()
 	port = int(os.environ.get("PORT", 33507))
 	app.run(host='0.0.0.0', port=port)
 #app.run(debug=True)
