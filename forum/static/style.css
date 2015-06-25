@@ -45,3 +45,16 @@
 	margin-left: auto;
 	text-align: center;
 }
+.post{
+	border-bottom: 1px solid gray;
+	margin-bottom: 1%;
+	padding: 1%;
+}
+.title{
+	display: inline;
+	color: blue;
+}
+.username{
+	display: inline;
+	font-size: 12pt;
+}

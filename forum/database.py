@@ -24,5 +24,7 @@ class Post(db.Model):
 		self.title = title
 		self.content = content
 		self.user_id = poster.id
-	def get_user():
-		return db.query.filter(User.id == user_id).first()
+
+def get_poster(post):
+	return User.query.filter(User.id == post.user_id).first()
+	

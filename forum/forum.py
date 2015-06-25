@@ -29,7 +29,10 @@ def test():
 
 @app.route('/')
 def index():
-	return render_template("index.html")
+	posts = Post.query.order_by(Post.id.desc()).limit(20)
+	for post in posts:
+		post.user = get_poster(post)
+	return render_template("posts.html", posts=posts)
 
 @app.route('/loginform')
 def loginform():
@@ -89,5 +92,5 @@ def action_createaccount():
 if __name__ == "__main__":
 	db.create_all()
 	port = int(os.environ.get("PORT", 33507))
-	app.run(host='0.0.0.0', port=port)
+	app.run(host='0.0.0.0', port=port, debug=True)
 #app.run(debug=True)
