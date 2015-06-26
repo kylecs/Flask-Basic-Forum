@@ -129,6 +129,19 @@ def action_createaccount():
 	return redirect(url_for("index"))
 
 
+
+
+
+
+#MANAGEMENT
+def add_subforum(title, description):
+	sub = Subforum(title, description)
+	db.session.add(sub)
+	db.session.commit()
+def init_site():
+	add_subforum("Admin", "This is a test subforum")
+	add_subforum("Other", "Discuss other things here")
+
 #RUN
 if __name__ == "__main__":
 	db.create_all()
