@@ -2,6 +2,7 @@ from flask import *
 from flask.ext.login import LoginManager, current_user, login_user, UserMixin, logout_user, login_required
 from config import *
 from database import *
+from management import *
 #CONFIG
 
 #SETUP
@@ -37,8 +38,6 @@ def subforum():
 	subforum_id = int(request.args.get("sub"))
 	subforum = Subforum.query.filter(Subforum.id == subforum_id).first()
 	posts = Post.query.filter(Post.subforum_id == subforum_id).order_by(Post.id.desc()).limit(50)
-	for post in posts:
-		post.user = User.query.filter(User.id == post.user_id).first()
 	return render_template("subforum.html", subforum=subforum, posts=posts)
 
 @app.route('/loginform')
@@ -133,6 +132,8 @@ def action_createaccount():
 #RUN
 if __name__ == "__main__":
 	db.create_all()
+	if not Subforum.query.all():
+		init_site()
 	port = int(os.environ.get("PORT", 33507))
 	app.run(host='0.0.0.0', port=port, debug=True)
 #app.run(debug=True)
