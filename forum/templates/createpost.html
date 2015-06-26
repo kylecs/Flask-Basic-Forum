@@ -1,9 +1,24 @@
 {% extends 'layout.html' %}
 {% block body%}
-<div class="postsubmit">
-This is where one may add posts....
 
-<form action="action_post" method="POST">
+
+{% if errors %}
+	<div class="errors">
+	{% for error in errors %}
+		<p class="error">
+			{{ error }}
+		</p>
+
+	{% endfor %}
+	</div>
+{% endif %}
+<div class="postsubmit">
+Enter your post here:<br>
+<div class="postinginfo">
+	You are posting to {{ subforum.title }}
+</div>
+
+<form action="action_post?sub={{ subforum.id }}" method="POST">
 
 	<input type="text" placeholder="Title" name="title"><br>
 

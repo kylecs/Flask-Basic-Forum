@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+{% block body %}
+<div class="subforumheader">
+	<div class="subforumheadertitle">
+	{{ subforum.title}} 
+	</div>
+	--
+	<div class="subforumheaderdesc">
+	{{ subforum.description }}
+	</div>
+	<div class="subforumheaderlink">
+	<br>
+	<a href="/addpost?sub={{ subforum.id }}">Create a post in <b>{{ subforum.title }}</b></a>
+	</div>
+</div>
+
+{% for post in posts %}
+<div class="post">
+	<div class="posttitle">
+	{{ post.title }}
+	</div>
+	<div class="postusername">
+		by <b> {{post.get_user().username}}</b>
+	</div>
+</div>
+{% endfor %}
+
+{% endblock %}
