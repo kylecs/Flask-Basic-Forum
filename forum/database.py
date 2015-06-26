@@ -33,6 +33,7 @@ class User(UserMixin, db.Model):
 	username = db.Column(db.Text, unique=True)
 	password_hash = db.Column(db.Text)
 	email = db.Column(db.Text, unique=True)
+	posts = db.relationship("Post", backref="user")
 	def __init__(self, email, username, password):
 		self.email = email
 		self.username = username
@@ -46,16 +47,15 @@ class Post(db.Model):
 	content = db.Column(db.Text)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	subforum_id = db.Column(db.Integer, db.ForeignKey('subforum.id'))
-	def __init__(self, title, content, poster):
+	def __init__(self, title, content):
 		self.title = title
 		self.content = content
-		self.user_id = poster.id
-	def get_user(self):
-		return User.query.filter(User.id == self.user_id).first()
 class Subforum(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.Text, unique=True)
 	description = db.Column(db.Text)
+	subforums = db.relationship("Subforum")
+	parent_id = db.Column(db.Integer, db.ForeignKey('subforum.id'))
 	posts = db.relationship("Post", backref="subforum")
 	def __init__(self, title, description):
 		self.title = title

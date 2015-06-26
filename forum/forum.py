@@ -17,19 +17,12 @@ def load_user(userid):
 	return User.query.get(userid)
 
 
-#test
-@app.route('/test')
-def test():
-	user = User.query.first()
-	return str(user.posts[1].title)
-
 
 #VIEWS
 
 @app.route('/')
 def index():
-	subforums = Subforum.query.order_by(Subforum.id)
-
+	subforums = Subforum.query.filter(Subforum.parent_id == None).order_by(Subforum.id)
 	return render_template("subforums.html", subforums=subforums)
 
 @app.route('/subforum')
@@ -37,7 +30,8 @@ def subforum():
 	subforum_id = int(request.args.get("sub"))
 	subforum = Subforum.query.filter(Subforum.id == subforum_id).first()
 	posts = Post.query.filter(Post.subforum_id == subforum_id).order_by(Post.id.desc()).limit(50)
-	return render_template("subforum.html", subforum=subforum, posts=posts)
+	subforums = Subforum.query.filter(Subforum.parent_id == subforum_id).all()
+	return render_template("subforum.html", subforum=subforum, posts=posts, subforums=subforums)
 
 @app.route('/loginform')
 def loginform():
@@ -51,7 +45,6 @@ def addpost():
 	subforum = Subforum.query.filter(Subforum.id == subforum_id).first()
 
 	return render_template("createpost.html", subforum=subforum)
-
 
 
 #ACTIONS
@@ -76,9 +69,10 @@ def action_post():
 		errors.append("Post must be between 10 and 5000 characters long!")
 		retry = True
 	if retry:
-		return render_template("createpost.html", errors=errors)
-	post = Post(title, content, user)
+		return render_template("createpost.html",subforum=subforum,  errors=errors)
+	post = Post(title, content)
 	subforum.posts.append(post)
+	user.posts.append(post)
 	db.session.commit()
 	return redirect("/subforum?sub=" + str(subforum_id))
 
@@ -90,6 +84,10 @@ def action_login():
 	user = User.query.filter(User.username == username).first()
 	if user and user.check_password(password):
 		login_user(user)
+	else:
+		errors = []
+		errors.append("Username or password is incorrect!")
+		return render_template("login.html", errors=errors)
 	return redirect(url_for("index"))
 
 
@@ -128,18 +126,25 @@ def action_createaccount():
 	return redirect(url_for("index"))
 
 
-
-
-
-
 #MANAGEMENT
-def add_subforum(title, description):
+def add_subforum(title, description, parent=None):
 	sub = Subforum(title, description)
-	db.session.add(sub)
+	if parent:
+		parent.subforums.append(sub)
+	else:
+		db.session.add(sub)
+
 	db.session.commit()
+	return sub
 def init_site():
-	add_subforum("Admin", "This is a test subforum")
+	admin = add_subforum("Forum", "Announcements, bug reports, and general discussion about the forum belongs here")
+	add_subforum("Announcements", "View forum announcements here",admin)
+	add_subforum("Bug Reports", "Report bugs with the forum here", admin)
+	add_subforum("General Discussion", "Use this subforum to post anything you want")
 	add_subforum("Other", "Discuss other things here")
+	user = User("kyl@spe.com", "admin", "password")
+	db.session.add(user)
+	db.session.commit()
 
 #RUN
 if __name__ == "__main__":

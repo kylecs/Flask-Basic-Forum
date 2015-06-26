@@ -16,9 +16,10 @@
 	overflow: hidden;
 	vertical-align: middle;
 	padding: 0.5%;
+	margin-bottom: none;
 }
 .content{
-	margin-top: 2%;
+	margin-top: 0.5%;
 }
 .login{
 	width: 25%;
@@ -31,7 +32,6 @@
 	margin-left: auto;
 	text-align: center;
 	margin-top: 3%;
-
 }
 .loginelement{
 	margin-top: 0.5%;
@@ -41,17 +41,23 @@
 	font-size: 12pt;
 }
 .postsubmit{
-	margin-right: auto;
 	margin-left: auto;
+	margin-right: auto;
 	text-align: center;
+
 }
 .subforumlisting{
 	border-bottom: 1px solid gray;
 	padding: 1%;
 	margin-bottom: 1%;
 }
+.inputbox{
+	padding: 0.25%;
+	margin-top: 0.5%;
+}
 .errors{
 	border-bottom: 1px solid black;
+	margin-top: 2%;
 }
 .error{
 	color: red;
@@ -67,9 +73,11 @@
 	font-style: italic;
 }
 .subforumheader{
-	padding: 1%;
+	padding: 0.5%;
+	padding-left: 1%;
+	margin-top: none;
 	padding-bottom: none;
-	margin-bottom: 1%;
+	margin-bottom: 0.5%;
 	border: 1px solid black;
 	font-size: 15pt;
 }
@@ -90,11 +98,35 @@
 }
 .subforumheaderlink{
 	font-style: italic;
-	font-size: 14pt;
+	font-size: 12pt;
+	margin-top: 0.5%;
 }
 .postinginfo{
-	font-size: 13pt;
+	font-size: 11pt;
+	font-style: italic;
 }
 #nolinks{
 	text-decoration: none;
+}
+.noposts{
+	padding: 1%;
+}
+.subsubforums{
+	border: 1px solid black;
+	padding: 0.5%;
+	margin-top: 0.5%;
+	padding-left: 1%;
+}
+.subsubforumtitle{
+	font-weight: bolder;
+	text-decoration: none;
+	font-size: 14pt;
+}
+.subsubforumdesc{
+	font-style: italic;
+	font-size: 12pt;
+}
+.toplevelinfo{
+	padding: 0.5%;
+	font-weight: bold;
 }

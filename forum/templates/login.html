@@ -1,16 +1,7 @@
 {% extends 'layout.html' %}
 {% block body %}
 
-{% if errors %}
-	<div class="errors">
-	{% for error in errors %}
-		<p class="error">
-			{{ error }}
-		</p>
 
-	{% endfor %}
-	</div>
-{% endif %}
 <div class="loginbox">
 	<h3>Login to Account</h3>
 	<form action="/action_login" method="POST">
