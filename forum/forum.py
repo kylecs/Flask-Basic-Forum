@@ -1,15 +1,19 @@
 from flask import *
 from flask.ext.login import LoginManager, current_user, login_user, UserMixin, logout_user, login_required
+#from werkzeug.contrib.fixers import ProxyFix
 from config import *
-from database import *
 #CONFIG
 
 #SETUP
 app = Flask(__name__)
 app.config.from_object(__name__)
+
+from database import * #this had to happen, believe me
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+#app.wsgi_app = ProxyFix(app.wsgi_app)
 
 #DATABASE STUFF
 @login_manager.user_loader
@@ -148,9 +152,8 @@ def init_site():
 
 #RUN
 if __name__ == "__main__":
-	db.create_all()
+	#db.create_all()
 	if not Subforum.query.all():
 		init_site()
 	port = int(os.environ.get("PORT", 33507))
 	app.run(host='0.0.0.0', port=port, debug=True)
-#app.run(debug=True)
