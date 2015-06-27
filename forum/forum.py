@@ -7,7 +7,6 @@ import os
 SECRET_KEY = 'super_secret'
 SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
 
-from database import *
 
 
 #SETUP
@@ -15,6 +14,7 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 
 
+from database import *
 
 
 login_manager = LoginManager()
