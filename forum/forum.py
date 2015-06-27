@@ -1,7 +1,6 @@
 from flask import *
 from flask.ext.login import LoginManager, login_required, current_user
 import os
-from database import *
 #CONFIG
 
 SECRET_KEY = 'super_secret'
@@ -13,6 +12,7 @@ SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
 app = Flask(__name__)
 app.config.from_object(__name__)
 
+from database import *
 
 
 
