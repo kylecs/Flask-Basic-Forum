@@ -1,4 +1,0 @@
-#CONFIG VARIABLES GO HERE
-import os
-SECRET_KEY = 'super_secret'
-SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']

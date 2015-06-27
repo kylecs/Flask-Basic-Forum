@@ -10,6 +10,7 @@
 	
 	padding-left: 3%;
 	padding-right: 3%;
+
 }
 .header{
 	border: 1px solid black;
@@ -129,4 +130,25 @@
 .toplevelinfo{
 	padding: 0.5%;
 	font-weight: bold;
+}
+.actualpost{
+	padding: 1%;
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+.actualposttitle{
+	border-collapse: collapse;
+	border-bottom: 1px solid black;
+	padding: 1%;
+	font-size: 16pt;
+	font-weight: bold;
+}
+.postcontent{
+	padding: 1%;
+	margin-top: 1%;
+}
+.postposter{
+	font-size: 12pt;
+	font-style: italic;
+	color: black;
 }

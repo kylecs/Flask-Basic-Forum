@@ -1,10 +1,9 @@
-from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.login import UserMixin
-from werkzeug.security import generate_password_hash, check_password_hash
 from forum import app
-db = SQLAlchemy(app)
+from flask.ext.login import UserMixin
+from flask.ext.sqlalchemy import SQLAlchemy
 import re
-
+from werkzeug.security import generate_password_hash, check_password_hash
+db = SQLAlchemy(app)
 password_regex = re.compile("^[a-zA-Z0-9!@#%&]{6,40}$")
 username_regex = re.compile("^[a-zA-Z0-9!@#%&]{4,40}$")
 #Account checks
@@ -60,5 +59,3 @@ class Subforum(db.Model):
 	def __init__(self, title, description):
 		self.title = title
 		self.description = description
-def get_poster(post):
-	return User.query.filter(User.id == post.user_id).first()

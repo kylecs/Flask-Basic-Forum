@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+{% block body %}
+<div class="actualpost">
+	<div class="actualposttitle">
+		<a href="/viewpost?post={{ post.id }}">{{post.title}}</a>
+		<div class="postposter">
+			by {{ post.user.username }}
+		</div>
+	</div>
+	<div class="postcontent">
+		{{post.content}}
+	</div>
+
+</div>
+
+{% endblock %}

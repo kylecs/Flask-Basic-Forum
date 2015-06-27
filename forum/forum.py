@@ -1,19 +1,24 @@
 from flask import *
-from flask.ext.login import LoginManager, current_user, login_user, UserMixin, logout_user, login_required
-#from werkzeug.contrib.fixers import ProxyFix
-from config import *
+from flask.ext.login import LoginManager, login_required, current_user
+import os
+from database import *
 #CONFIG
+
+SECRET_KEY = 'super_secret'
+SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+
+
 
 #SETUP
 app = Flask(__name__)
 app.config.from_object(__name__)
 
-from database import * #this had to happen, believe me
+
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-#app.wsgi_app = ProxyFix(app.wsgi_app)
 
 #DATABASE STUFF
 @login_manager.user_loader
@@ -35,7 +40,8 @@ def subforum():
 	subforum = Subforum.query.filter(Subforum.id == subforum_id).first()
 	posts = Post.query.filter(Post.subforum_id == subforum_id).order_by(Post.id.desc()).limit(50)
 	subforums = Subforum.query.filter(Subforum.parent_id == subforum_id).all()
-	return render_template("subforum.html", subforum=subforum, posts=posts, subforums=subforums)
+	path = generateLinkPath(subforum_id)
+	return render_template("subforum.html", subforum=subforum, posts=posts, subforums=subforums, path=path)
 
 @app.route('/loginform')
 def loginform():
@@ -50,8 +56,14 @@ def addpost():
 
 	return render_template("createpost.html", subforum=subforum)
 
+@app.route('/viewpost')
+def viewpost():
+	postid = int(request.args.get("post"))
+	post = Post.query.filter(Post.id == postid).first()
+	return render_template("viewpost.html", post=post)
 
 #ACTIONS
+
 @login_required
 @app.route('/action_post', methods=['POST', 'GET'])
 def action_post():
@@ -129,7 +141,6 @@ def action_createaccount():
 	login_user(user)
 	return redirect(url_for("index"))
 
-
 #MANAGEMENT
 def add_subforum(title, description, parent=None):
 	sub = Subforum(title, description)
@@ -150,10 +161,26 @@ def init_site():
 	db.session.add(user)
 	db.session.commit()
 
-#RUN
+def generateLinkPath(subforumid):
+	links = []
+	subforum = Subforum.query.filter(Subforum.id == subforumid).first()
+	parent = Subforum.query.filter(Subforum.id == subforum.parent_id).first()
+	links.append("<a href=\"/subforum?sub=" + str(subforum.id) + "\">" + subforum.title + "</a>")
+	while parent is not None:
+		links.append("<a href=\"/subforum?sub=" + str(parent.id) + "\">" + parent.title + "</a>")
+		parent = Subforum.query.filter(Subforum.id == parent.parent_id).first()
+	links.append("<a href=\"/\">Forum Index</a>")
+	link = ""
+	for l in reversed(links):
+		link = link + " / " + l
+	return link
+#DATABASE STUFF
+
 if __name__ == "__main__":
-	#db.create_all()
-	if not Subforum.query.all():
+	db.create_all()
+	if not User.query.all():
 		init_site()
 	port = int(os.environ.get("PORT", 33507))
 	app.run(host='0.0.0.0', port=port, debug=True)
+
+	

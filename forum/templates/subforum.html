@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
 {% block body %}
+{{ path|safe }}
 <div class="subforumheader">
 	<div class="subforumheadertitle">
 	{{ subforum.title}} 
@@ -19,7 +20,7 @@
 		<div class="subsubforumdesc">
 		{{ sub.description }}
 		</div>
-		</div>
+		 </div>
 
 		{% endfor %}
 		{% endif %}
@@ -42,7 +43,7 @@
 	{% for post in posts %}
 	<div class="post">
 		<div class="posttitle">
-		{{ post.title }}
+		<a href="/viewpost?post={{ post.id }}">{{ post.title }}</a>
 		</div>
 		<div class="postusername">
 			by <b> {{post.user.username}}</b>
