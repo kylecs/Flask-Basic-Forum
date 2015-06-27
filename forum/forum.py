@@ -1,18 +1,19 @@
 from flask import *
-from flask.ext.login import LoginManager, login_required, current_user
+from flask.ext.login import LoginManager, login_required, current_user, logout_user, login_user
 import os
 #CONFIG
+
 
 SECRET_KEY = 'super_secret'
 SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
 
+from database import *
 
 
 #SETUP
 app = Flask(__name__)
 app.config.from_object(__name__)
 
-from database import *
 
 
 
