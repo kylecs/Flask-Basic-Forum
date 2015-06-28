@@ -1,19 +1,12 @@
 from flask import *
 from flask.ext.login import LoginManager, login_required, current_user, logout_user, login_user
 import os
+import datetime
+import config
 #CONFIG
-
-
-SECRET_KEY = 'super_secret'
-SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
-
-
-
 #SETUP
 app = Flask(__name__)
-app.config.from_object(__name__)
-
-
+app.config.from_object(config)
 from database import *
 
 
@@ -40,9 +33,11 @@ def subforum():
 	subforum_id = int(request.args.get("sub"))
 	subforum = Subforum.query.filter(Subforum.id == subforum_id).first()
 	posts = Post.query.filter(Post.subforum_id == subforum_id).order_by(Post.id.desc()).limit(50)
+	if not subforum.path:
+		subforum.path = generateLinkPath(subforum.id)
+
 	subforums = Subforum.query.filter(Subforum.parent_id == subforum_id).all()
-	path = generateLinkPath(subforum_id)
-	return render_template("subforum.html", subforum=subforum, posts=posts, subforums=subforums, path=path)
+	return render_template("subforum.html", subforum=subforum, posts=posts, subforums=subforums, path=subforum.path)
 
 @app.route('/loginform')
 def loginform():
@@ -61,7 +56,10 @@ def addpost():
 def viewpost():
 	postid = int(request.args.get("post"))
 	post = Post.query.filter(Post.id == postid).first()
-	return render_template("viewpost.html", post=post)
+	if not post.subforum.path:
+		subforum.path = generateLinkPath(post.subforum.id)
+	time = get_time_difference_string(post.postdate)
+	return render_template("viewpost.html", post=post, path=subforum.path, time=time)
 
 #ACTIONS
 
@@ -87,11 +85,11 @@ def action_post():
 		retry = True
 	if retry:
 		return render_template("createpost.html",subforum=subforum,  errors=errors)
-	post = Post(title, content)
+	post = Post(title, content, datetime.datetime.now())
 	subforum.posts.append(post)
 	user.posts.append(post)
 	db.session.commit()
-	return redirect("/subforum?sub=" + str(subforum_id))
+	return redirect("/viewpost?post=" + str(post.id))
 
 
 @app.route('/action_login', methods=['POST'])
@@ -158,9 +156,6 @@ def init_site():
 	add_subforum("Bug Reports", "Report bugs with the forum here", admin)
 	add_subforum("General Discussion", "Use this subforum to post anything you want")
 	add_subforum("Other", "Discuss other things here")
-	user = User("kyl@spe.com", "admin", "password")
-	db.session.add(user)
-	db.session.commit()
 
 def generateLinkPath(subforumid):
 	links = []
@@ -175,6 +170,20 @@ def generateLinkPath(subforumid):
 	for l in reversed(links):
 		link = link + " / " + l
 	return link
+def get_time_difference_string(postdate):
+	diff = datetime.datetime.now() - postdate
+	seconds = diff.total_seconds()
+	if seconds / (60 * 60 * 24 * 30) > 1:
+		return " " + str(int(seconds / (60 * 60 * 24 * 30))) + " months ago"
+	elif seconds / (60 * 60 * 24) > 1:
+		return " " + str(int(seconds / (60*  60 * 24))) + " days ago"
+	elif seconds / (60 * 60) > 1:
+		return " " + str(int(seconds / (60 * 60))) + " hours ago"
+	elif seconds / (60) > 1:
+		return " " + str(int(seconds / 60)) + " minutes ago"
+	else:
+		return "Just a moment ago!"
+
 #DATABASE STUFF
 
 if __name__ == "__main__":

@@ -2,6 +2,7 @@ from forum import app
 from flask.ext.login import UserMixin
 from flask.ext.sqlalchemy import SQLAlchemy
 import re
+import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 db = SQLAlchemy(app)
 password_regex = re.compile("^[a-zA-Z0-9!@#%&]{6,40}$")
@@ -46,9 +47,11 @@ class Post(db.Model):
 	content = db.Column(db.Text)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	subforum_id = db.Column(db.Integer, db.ForeignKey('subforum.id'))
-	def __init__(self, title, content):
+	postdate = db.Column(db.DateTime)
+	def __init__(self, title, content, postdate):
 		self.title = title
 		self.content = content
+		self.postdate = postdate
 class Subforum(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.Text, unique=True)
@@ -56,6 +59,7 @@ class Subforum(db.Model):
 	subforums = db.relationship("Subforum")
 	parent_id = db.Column(db.Integer, db.ForeignKey('subforum.id'))
 	posts = db.relationship("Post", backref="subforum")
+	path = None
 	def __init__(self, title, description):
 		self.title = title
 		self.description = description
