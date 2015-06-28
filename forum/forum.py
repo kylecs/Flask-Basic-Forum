@@ -195,9 +195,6 @@ def init_site():
 	add_subforum("Other", "Discuss other things here")
 
 if __name__ == "__main__":
-	db.create_all()
-	if not Subforum.query.all():
-		init_site()
 	port = int(os.environ.get("PORT", 33507))
 	app.run(host='0.0.0.0', port=port, debug=True)
 
