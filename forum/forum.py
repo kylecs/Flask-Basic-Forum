@@ -38,6 +38,8 @@ def index():
 def subforum():
 	subforum_id = int(request.args.get("sub"))
 	subforum = Subforum.query.filter(Subforum.id == subforum_id).first()
+	if not subforum:
+		return error("That subforum does not exist!")
 	posts = Post.query.filter(Post.subforum_id == subforum_id).order_by(Post.id.desc()).limit(50)
 	if not subforum.path:
 		subforum.path = generateLinkPath(subforum.id)
@@ -55,6 +57,8 @@ def loginform():
 def addpost():
 	subforum_id = int(request.args.get("sub"))
 	subforum = Subforum.query.filter(Subforum.id == subforum_id).first()
+	if not subforum:
+		return error("That subforum does not exist!")
 
 	return render_template("createpost.html", subforum=subforum)
 
@@ -62,9 +66,11 @@ def addpost():
 def viewpost():
 	postid = int(request.args.get("post"))
 	post = Post.query.filter(Post.id == postid).first()
+	if not post:
+		return error("That post does not exist!")
 	if not post.subforum.path:
 		subforum.path = generateLinkPath(post.subforum.id)
-	comments = Comment.query.filter(Comment.post_id == postid).all() # no need for scalability now
+	comments = Comment.query.filter(Comment.post_id == postid).order_by(Comment.id.desc()) # no need for scalability now
 	return render_template("viewpost.html", post=post, path=subforum.path, comments=comments)
 
 #ACTIONS
@@ -74,6 +80,8 @@ def viewpost():
 def comment():
 	post_id = int(request.args.get("post"))
 	post = Post.query.filter(Post.id == post_id).first()
+	if not post:
+		return error("That post does not exist!")
 	content = request.form['content']
 	postdate = datetime.datetime.now()
 	comment = Comment(content, postdate)
@@ -122,7 +130,7 @@ def action_login():
 		errors = []
 		errors.append("Username or password is incorrect!")
 		return render_template("login.html", errors=errors)
-	return redirect(url_for("index"))
+	return redirect("/")
 
 
 @login_required
@@ -130,7 +138,7 @@ def action_login():
 def action_logout():
 	#todo
 	logout_user()
-	return redirect(url_for("index"))
+	return redirect("/")
 
 @app.route('/action_createaccount', methods=['POST'])
 def action_createaccount():
@@ -157,9 +165,10 @@ def action_createaccount():
 	db.session.add(user)
 	db.session.commit()
 	login_user(user)
-	return redirect(url_for("index"))
+	return redirect("/")
 
-
+def error(errormessage):
+	return "<b style=\"color: red;\">" + errormessage + "</b>"
 
 def generateLinkPath(subforumid):
 	links = []

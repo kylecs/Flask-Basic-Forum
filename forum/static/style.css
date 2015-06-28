@@ -135,6 +135,7 @@
 	padding: 1%;
 	border: 1px solid black;
 	border-collapse: collapse;
+	margin-bottom: 1%;
 }
 .actualposttitle{
 	border-collapse: collapse;
@@ -145,7 +146,6 @@
 }
 .postcontent{
 	padding: 1%;
-	margin-top: 1%;
 }
 .postposter{
 	font-size: 12pt;
@@ -167,6 +167,25 @@
 .comment{
 	border-bottom: 1px solid gray;
 }
-.addcomment{
+.commentuser{
+	display: inline;
+	font-weight: bold;
+}
+.commentcontent{
+	display: inline;
+}
+.commenttime{
+	font-size: 11pt;
+	font-style: italic;
+}
 
+
+.addcomment{
+	display: none;
+	margin-right: auto;
+	margin-left: auto;
+	text-align: center;
+}
+.varwidth{
+	width: 50%;
 }

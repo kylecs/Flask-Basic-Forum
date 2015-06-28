@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 {% block body %}
 {{ path|safe}}
+
 <div class="actualpost">
 	<div class="actualposttitle">
 		<a href="/viewpost?post={{ post.id }}">{{post.title}}</a>
@@ -12,23 +13,58 @@
 			{{ post.get_time_string() }}
 		</div>
 	</div>
-	<div class="postcontent whitespace">
+	<div class="postcontent">
 		{{post.content}}
 	</div>
 
 </div>
-<div class="addcomment">
+<div class="addcomment" id="addcomment">
 	<form action="/action_comment?post={{ post.id }}" method="POST">
-		<textarea class="inputbox" rows="4" name="content" cols="50"></textarea><br>
-		<input class="inputbox" type="submit" value="Comment">
+		<textarea class="inputbox varwidth" rows="6" name="content"></textarea><br>
+		<input class="inputbox" style="margin-bottom: 1%;" type="submit" value="Comment">
 	</form>
+</div>
+<div style="text-align: center;">
+	<input type="button" id="displayaddcomment" onclick="toggle()" value="Add a comment">
 </div>
 {%if comments%}
 <div class="comments">
 {% for comment in comments %}
-	({{ comment.user.username }}) - {{ comment.content }}
-
+	
+	<div class="comment">
+		<div class="commentuser">
+			({{ comment.user.username }}) - 
+		</div>
+		<div class="commentcontent">
+			{{ comment.content }}
+		</div>
+		
+		<div class="commenttime">
+			{{ comment.get_time_string() }}
+		</div>
+	</div>
+	<br>
+	
 {% endfor %}
 </div>
 {% endif %}
+
+<script type="text/javascript">
+function toggle(){
+	var div = document.getElementById("addcomment");
+	var button = document.getElementById("displayaddcomment")
+	if(div.style.display == "none" || div.style.display.trim() == ""){
+		div.style.display = "inline";
+		button.value="Hide";
+	}else{
+		div.style.display = "none";
+		button.value="Add a comment"
+	}
+	
+}
+</script>
+
+
 {% endblock %}
+
+
