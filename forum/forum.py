@@ -2,13 +2,18 @@ from flask import *
 from flask.ext.login import LoginManager, login_required, current_user, logout_user, login_user
 import os
 import datetime
-import config
+
 #CONFIG
+
+SECRET_KEY = 'this_is_the_most_secure_keyeverbecauseitlacksconSISTENCY#'
+SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+
+
 #SETUP
 app = Flask(__name__)
-app.config.from_object(config)
-from database import *
+app.config.from_object(__name__)
 
+from database import *
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -172,7 +177,7 @@ def get_time_difference_string(postdate):
 #DATABASE STUFF
 
 if __name__ == "__main__":
-	db.create_all()
+	
 	port = int(os.environ.get("PORT", 33507))
 	app.run(host='0.0.0.0', port=port, debug=True)
 
