@@ -187,6 +187,8 @@ def add_subforum(title, description, parent=None):
 
 	db.session.commit()
 	return sub
+
+
 def init_site():
 	admin = add_subforum("Forum", "Announcements, bug reports, and general discussion about the forum belongs here")
 	add_subforum("Announcements", "View forum announcements here",admin)
@@ -194,6 +196,9 @@ def init_site():
 	add_subforum("General Discussion", "Use this subforum to post anything you want")
 	add_subforum("Other", "Discuss other things here")
 
+db.create_all()
+if not Subforum.query.all():
+		init_site()
 if __name__ == "__main__":
 	port = int(os.environ.get("PORT", 33507))
 	app.run(host='0.0.0.0', port=port, debug=True)
