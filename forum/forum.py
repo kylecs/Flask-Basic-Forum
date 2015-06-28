@@ -177,7 +177,7 @@ def get_time_difference_string(postdate):
 #DATABASE STUFF
 
 if __name__ == "__main__":
-	
+	db.create_all()
 	port = int(os.environ.get("PORT", 33507))
 	app.run(host='0.0.0.0', port=port, debug=True)
 

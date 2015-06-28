@@ -30,11 +30,12 @@ def valid_content(content):
 
 #OBJECT MODELS
 class User(UserMixin, db.Model):
+	__tablename__ = "user"
 	id = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.Text, unique=True)
 	password_hash = db.Column(db.Text)
 	email = db.Column(db.Text, unique=True)
-	posts = db.relationship("Post", backref="user")
+	posts = db.relationship("post", backref="user")
 	def __init__(self, email, username, password):
 		self.email = email
 		self.username = username
@@ -43,23 +44,25 @@ class User(UserMixin, db.Model):
 	def check_password(self, password):
 		return check_password_hash(self.password_hash, password)
 class Post(db.Model):
+	__tablename__ = "post"
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.Text)
 	content = db.Column(db.Text)
-	user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
-	subforum_id = db.Column(db.Integer, db.ForeignKey('Subforum.id'))
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+	subforum_id = db.Column(db.Integer, db.ForeignKey('subforum.id'))
 	postdate = db.Column(db.DateTime)
 	def __init__(self, title, content, postdate):
 		self.title = title
 		self.content = content
 		self.postdate = postdate
 class Subforum(db.Model):
+	__tablename__ = "subforum"
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.Text, unique=True)
 	description = db.Column(db.Text)
-	subforums = db.relationship("Subforum")
-	parent_id = db.Column(db.Integer, db.ForeignKey('Subforum.id'))
-	posts = db.relationship("Post", backref="subforum")
+	subforums = db.relationship("subforum")
+	parent_id = db.Column(db.Integer, db.ForeignKey('subforum.id'))
+	posts = db.relationship("post", backref="subforum")
 	path = None
 	def __init__(self, title, description):
 		self.title = title
