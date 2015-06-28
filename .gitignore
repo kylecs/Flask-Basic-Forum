@@ -2,4 +2,4 @@
 data
 venv
 .git
-forum/config.*
+forum/config.py
