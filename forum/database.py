@@ -46,8 +46,8 @@ class Post(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.Text)
 	content = db.Column(db.Text)
-	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-	subforum_id = db.Column(db.Integer, db.ForeignKey('subforum.id'))
+	user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
+	subforum_id = db.Column(db.Integer, db.ForeignKey('Subforum.id'))
 	postdate = db.Column(db.DateTime)
 	def __init__(self, title, content, postdate):
 		self.title = title
@@ -58,7 +58,7 @@ class Subforum(db.Model):
 	title = db.Column(db.Text, unique=True)
 	description = db.Column(db.Text)
 	subforums = db.relationship("Subforum")
-	parent_id = db.Column(db.Integer, db.ForeignKey('subforum.id'))
+	parent_id = db.Column(db.Integer, db.ForeignKey('Subforum.id'))
 	posts = db.relationship("Post", backref="subforum")
 	path = None
 	def __init__(self, title, description):
