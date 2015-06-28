@@ -2,6 +2,7 @@ from flask import *
 from flask.ext.login import LoginManager, login_required, current_user, logout_user, login_user
 import os
 import datetime
+from database import *
 
 #CONFIG
 
@@ -13,7 +14,6 @@ SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
 app = Flask(__name__)
 app.config.from_object(__name__)
 
-from database import *
 
 login_manager = LoginManager()
 login_manager.init_app(app)

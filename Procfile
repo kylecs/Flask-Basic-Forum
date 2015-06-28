@@ -1,1 +1,1 @@
-web: gunicorn forum.forum:app
+web: python forum/forum.py
