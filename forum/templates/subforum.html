@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
 {% block body %}
+
 {{ path|safe }}
 <div class="subforumheader">
 	<div class="subforumheadertitle">
@@ -47,9 +48,13 @@
 		</div>
 		<div class="postusername">
 			by <b> {{post.user.username}}</b>
+			<div class="date">
+			{{ post.get_time_string() }}
+			</div>
 		</div>
 	</div>
 	{% endfor %}
+
 {% else %}
 <div class="noposts">
 <b>There are no posts in this subforum</b>

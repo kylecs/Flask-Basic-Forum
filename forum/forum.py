@@ -64,13 +64,26 @@ def viewpost():
 	post = Post.query.filter(Post.id == postid).first()
 	if not post.subforum.path:
 		subforum.path = generateLinkPath(post.subforum.id)
-	time = get_time_difference_string(post.postdate)
-	return render_template("viewpost.html", post=post, path=subforum.path, time=time)
+	comments = Comment.query.filter(Comment.post_id == postid).all() # no need for scalability now
+	return render_template("viewpost.html", post=post, path=subforum.path, comments=comments)
 
 #ACTIONS
 
 @login_required
-@app.route('/action_post', methods=['POST', 'GET'])
+@app.route('/action_comment', methods=['POST', 'GET'])
+def comment():
+	post_id = int(request.args.get("post"))
+	post = Post.query.filter(Post.id == post_id).first()
+	content = request.form['content']
+	postdate = datetime.datetime.now()
+	comment = Comment(content, postdate)
+	current_user.comments.append(comment)
+	post.comments.append(comment)
+	db.session.commit()
+	return redirect("/viewpost?post=" + str(post_id))
+
+@login_required
+@app.route('/action_post', methods=['POST'])
 def action_post():
 	subforum_id = int(request.args.get("sub"))
 	subforum = Subforum.query.filter(Subforum.id == subforum_id).first()
@@ -161,19 +174,6 @@ def generateLinkPath(subforumid):
 	for l in reversed(links):
 		link = link + " / " + l
 	return link
-def get_time_difference_string(postdate):
-	diff = datetime.datetime.now() - postdate
-	seconds = diff.total_seconds()
-	if seconds / (60 * 60 * 24 * 30) > 1:
-		return " " + str(int(seconds / (60 * 60 * 24 * 30))) + " months ago"
-	elif seconds / (60 * 60 * 24) > 1:
-		return " " + str(int(seconds / (60*  60 * 24))) + " days ago"
-	elif seconds / (60 * 60) > 1:
-		return " " + str(int(seconds / (60 * 60))) + " hours ago"
-	elif seconds / (60) > 1:
-		return " " + str(int(seconds / 60)) + " minutes ago"
-	else:
-		return "Just a moment ago!"
 
 #DATABASE STUFF
 

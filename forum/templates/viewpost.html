@@ -9,13 +9,26 @@
 
 		</div>
 		<div class="posttime">
-			{{ time }}
+			{{ post.get_time_string() }}
 		</div>
 	</div>
-	<div class="postcontent">
+	<div class="postcontent whitespace">
 		{{post.content}}
 	</div>
 
 </div>
+<div class="addcomment">
+	<form action="/action_comment?post={{ post.id }}" method="POST">
+		<textarea class="inputbox" rows="4" name="content" cols="50"></textarea><br>
+		<input class="inputbox" type="submit" value="Comment">
+	</form>
+</div>
+{%if comments%}
+<div class="comments">
+{% for comment in comments %}
+	({{ comment.user.username }}) - {{ comment.content }}
 
+{% endfor %}
+</div>
+{% endif %}
 {% endblock %}

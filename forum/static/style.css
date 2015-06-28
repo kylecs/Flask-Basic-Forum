@@ -156,3 +156,17 @@
 	font-style: italic;
 	font-size: 11pt;
 }
+.whitespace{
+	white-space: pre-line;
+}
+.comments{
+	border: 1px solid gray;
+	padding: 1%;
+	margin-top: 1%;
+}
+.comment{
+	border-bottom: 1px solid gray;
+}
+.addcomment{
+
+}
