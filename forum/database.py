@@ -1,11 +1,10 @@
-from forum import app
+from app import app
 from flask.ext.login import UserMixin
 from flask.ext.sqlalchemy import SQLAlchemy
 import re
 import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 db = SQLAlchemy(app)
-db.create_all()
 password_regex = re.compile("^[a-zA-Z0-9!@#%&]{6,40}$")
 username_regex = re.compile("^[a-zA-Z0-9!@#%&]{4,40}$")
 #Account checks

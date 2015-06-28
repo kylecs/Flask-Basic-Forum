@@ -2,6 +2,8 @@ from flask import *
 from flask.ext.login import LoginManager, login_required, current_user, logout_user, login_user
 import os
 import datetime
+from app import app
+from database import *
 
 #CONFIG
 
@@ -10,9 +12,8 @@ SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
 
 
 #SETUP
-app = Flask(__name__)
+#app = Flask(__name__)
 app.config.from_object(__name__)
-from database import *
 
 
 login_manager = LoginManager()
@@ -177,6 +178,7 @@ def get_time_difference_string(postdate):
 #DATABASE STUFF
 
 def add_subforum(title, description, parent=None):
+	print("adding " + title)
 	sub = Subforum(title, description)
 	if parent:
 		parent.subforums.append(sub)
@@ -194,9 +196,9 @@ def init_site():
 
 if __name__ == "__main__":
 	db.create_all()
-	if not User.query.all().first():
+	if not Subforum.query.all():
 		init_site()
 	port = int(os.environ.get("PORT", 33507))
 	app.run(host='0.0.0.0', port=port, debug=True)
 
-	
+
