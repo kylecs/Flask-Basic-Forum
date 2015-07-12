@@ -47,7 +47,7 @@
 		<a href="/viewpost?post={{ post.id }}">{{ post.title }}</a>
 		</div>
 		<div class="postusername">
-			by <b> {{post.user.username}}</b>
+			by <b {% if post.user.admin %} style="color: red;" {% endif %}> {{post.user.username}}</b>
 			<div class="date">
 			{{ post.get_time_string() }}
 			</div>

@@ -1,19 +1,12 @@
 from flask import *
 from flask.ext.login import LoginManager, login_required, current_user, logout_user, login_user
-import os
 import datetime
 from app import app
 from database import *
-
-#CONFIG
-
-SECRET_KEY = 'this_is_the2_most_secure_keyeverbecauseitlacksconSISTENCY#'
-SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
-
-
+import config
+import os
 #SETUP
-#app = Flask(__name__)
-app.config.from_object(__name__)
+app.config.from_object(config)
 
 
 login_manager = LoginManager()
@@ -162,6 +155,8 @@ def action_createaccount():
 	if retry:
 		return render_template("login.html", errors=errors)
 	user = User(email, username, password)
+	if user.username == "admin":
+		user.admin = True
 	db.session.add(user)
 	db.session.commit()
 	login_user(user)

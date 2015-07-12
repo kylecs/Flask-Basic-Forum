@@ -33,13 +33,14 @@ class User(UserMixin, db.Model):
 	username = db.Column(db.Text, unique=True)
 	password_hash = db.Column(db.Text)
 	email = db.Column(db.Text, unique=True)
+	admin = db.Column(db.Boolean, default=False, unique=True)
 	posts = db.relationship("Post", backref="user")
 	comments = db.relationship("Comment", backref="user")
+
 	def __init__(self, email, username, password):
 		self.email = email
 		self.username = username
 		self.password_hash = generate_password_hash(password)
-
 	def check_password(self, password):
 		return check_password_hash(self.password_hash, password)
 class Post(db.Model):
