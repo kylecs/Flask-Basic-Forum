@@ -5,6 +5,7 @@ from app import app
 from database import *
 import config
 import os
+from setup import *
 #SETUP
 app.config.from_object(config)
 
@@ -179,32 +180,12 @@ def generateLinkPath(subforumid):
 		link = link + " / " + l
 	return link
 
-#DATABASE STUFF
 
-def add_subforum(title, description, parent=None):
-	print("adding " + title)
-	sub = Subforum(title, description)
-	if parent:
-		parent.subforums.append(sub)
-	else:
-		db.session.add(sub)
-
-	db.session.commit()
-	return sub
-
-
-def init_site():
-	admin = add_subforum("Forum", "Announcements, bug reports, and general discussion about the forum belongs here")
-	add_subforum("Announcements", "View forum announcements here",admin)
-	add_subforum("Bug Reports", "Report bugs with the forum here", admin)
-	add_subforum("General Discussion", "Use this subforum to post anything you want")
-	add_subforum("Other", "Discuss other things here")
 
 db.create_all()
 if not Subforum.query.all():
 		init_site()
 if __name__ == "__main__":
-	port = int(os.environ.get("PORT", 33507))
+	setup.setup()
+	port = int(os.environ["PORT"])
 	app.run(host='0.0.0.0', port=port, debug=True)
-
-

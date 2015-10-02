@@ -93,6 +93,7 @@ class Subforum(db.Model):
 	parent_id = db.Column(db.Integer, db.ForeignKey('subforum.id'))
 	posts = db.relationship("Post", backref="subforum")
 	path = None
+	hidden = db.Column(db.Boolean, default=False)
 	def __init__(self, title, description):
 		self.title = title
 		self.description = description
