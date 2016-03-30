@@ -4,6 +4,6 @@ To install, run the following commands:
 source venv/bin/activate
 ./run.sh
 
-On first run, the default subforums will be created. Although custom subforums are not supported through any user interface, it is possible to modify forum/setup.py to create custom subforums. No documentation on this is provided so it is impractical to do this.
+On first run, the default subforums will be created. Although custom subforums are not supported through any user interface, it is possible to modify forum/setup.py to create custom subforums.
 
 
